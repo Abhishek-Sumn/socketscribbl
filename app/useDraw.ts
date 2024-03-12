@@ -9,8 +9,19 @@ export const useDraw = (onDraw: ({ ctx, currentPoint, prevPoint }: Draw) => void
 
     const onMouseDown = () => setMouseDown(true)
 
+    const clear = () =>{
+        const canvas = canvasref.current
+        if(!canvas) return
+        const ctx = canvas.getContext('2d')
+        if(!ctx) return
+
+        ctx.clearRect(0,0,canvas.width,canvas.height)
+
+    }
+
     useEffect(() => {
         const handler = (e: MouseEvent) => {
+            if(!mouseDown) return
             const currentPoint = computepointcanvas(e)
 
             const ctx = canvasref.current?.getContext('2d')
@@ -20,8 +31,8 @@ export const useDraw = (onDraw: ({ ctx, currentPoint, prevPoint }: Draw) => void
             prevPoint.current = currentPoint
         }
 
+        const canvas = canvasref.current
         const computepointcanvas = (e: MouseEvent) => {
-            const canvas = canvasref.current
             if (!canvas) return
 
             const rect = canvas.getBoundingClientRect();
@@ -38,10 +49,36 @@ export const useDraw = (onDraw: ({ ctx, currentPoint, prevPoint }: Draw) => void
         canvasref.current?.addEventListener('mousemove', handler);
         window.addEventListener('mouseup', mouseUpHandler)
 
+
+
+
+
+        window.addEventListener("touchstart", function (e) {
+            if (e.target == canvas) {
+              e.preventDefault();
+            }
+          }, false);
+          window.addEventListener("touchend", function (e) {
+            if (e.target == canvas) {
+              e.preventDefault();
+            }
+          }, false);
+          window.addEventListener("touchmove", function (e) {
+            if (e.target == canvas) {
+              e.preventDefault();
+            }
+          }, false);
+          
+
+
+
+
+
+
         return () => {
             canvasref.current?.removeEventListener('mousemove', handler)
             window.removeEventListener('mouseup', mouseUpHandler)
         }
     }, [onDraw])
-    return { canvasref, onMouseDown }
+    return { canvasref, onMouseDown, clear }
 }
