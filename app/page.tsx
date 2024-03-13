@@ -35,7 +35,7 @@ export default function Home() {
     })
 
     socket.on('canvas-state-from-server',(state:string)=>{
-      console.log("i re")
+   
       const img = new Image()
       img.src = state
       img.onload = () => {
