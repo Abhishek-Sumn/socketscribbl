@@ -4,7 +4,7 @@ import { useDraw } from './useDraw'
 import { ChromePicker } from 'react-color'
 import { io } from 'socket.io-client';
 import { drawLine } from '@/utils/drawLine';
-const socket = io('https://scribblserver.onrender.com')
+const socket = io('https://scribblserver.azurewebsites.net/')
 
 
 type DrawLineprops = {
